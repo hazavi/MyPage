@@ -1,0 +1,53 @@
+﻿@page "/books/details"
+@inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Model
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h4>Books</h4>
+    <hr />
+    @if (books is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Title</dt>
+            <dd class="col-sm-10">@books.Title</dd>
+            <dt class="col-sm-2">Description</dt>
+            <dd class="col-sm-10">@books.Description</dd>
+            <dt class="col-sm-2">Pages</dt>
+            <dd class="col-sm-10">@books.Pages</dd>
+            <dt class="col-sm-2">ReleaseDate</dt>
+            <dd class="col-sm-10">@books.ReleaseDate.ToShortDateString()</dd>
+            <dt class="col-sm-2">Status</dt>
+            <dd class="col-sm-10">@books.Status</dd>
+        </dl>
+        <div>
+            <a href="@($"/books/edit?bookid={books.BookID}")">Edit</a> |
+            <a href="@($"/books")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    Books? books;
+
+    [SupplyParameterFromQuery]
+    public int BookID { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await DB.Books.FirstOrDefaultAsync(m => m.BookID == BookID);
+
+        if (books is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

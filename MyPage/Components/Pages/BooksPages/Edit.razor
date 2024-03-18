@@ -1,0 +1,113 @@
+﻿@page "/Books/edit"
+@inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Model
+@using BookLibrary.Model.Enum
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h4>Books</h4>
+<hr />
+@if (Books is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Books" OnValidSubmit="UpdateBooks" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="Books.BookID" value="@Books.BookID" />
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <InputText id="title" @bind-Value="Books.Title" class="form-control" />
+                    <ValidationMessage For="() => Books.Title" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <InputText id="description" @bind-Value="Books.Description" class="form-control" />
+                    <ValidationMessage For="() => Books.Description" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="pages" class="form-label">Pages:</label>
+                    <InputNumber id="pages" @bind-Value="Books.Pages" class="form-control" />
+                    <ValidationMessage For="() => Books.Pages" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="releasedate" class="form-label">ReleaseDate:</label>
+                    <InputDate id="releasedate" @bind-Value="Books.ReleaseDate" class="form-control" />
+                    <ValidationMessage For="() => Books.ReleaseDate" class="text-danger" />
+                </div>
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <InputSelect id="Status" class="form-control" @bind-Value="Books.Status">
+                        <option value="">Select Status</option>
+                        @foreach (var status in Enum.GetValues<Status>())
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Books.Status)" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/books">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int BookID { get; set; }
+
+    [SupplyParameterFromForm]
+    public Books? Books { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Books ??= await DB.Books.FirstOrDefaultAsync(m => m.BookID == BookID);
+
+        if (Books is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see https://aka.ms/RazorPagesCRUD.
+    public async Task UpdateBooks()
+    {
+        DB.Attach(Books!).State = EntityState.Modified;
+
+        try
+        {
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!BooksExists(Books!.BookID))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/books");
+    }
+
+    bool BooksExists(int bookid)
+    {
+        return DB.Books.Any(e => e.BookID == bookid);
+    }
+}

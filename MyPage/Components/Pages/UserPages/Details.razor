@@ -1,0 +1,51 @@
+﻿@page "/users/details"
+@inject MyPage.Data.PageDbContext DB
+@using MyPage.Model
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    @if (user is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">UserName</dt>
+            <dd class="col-sm-10">@user.UserName</dd>
+            <dt class="col-sm-2">Password</dt>
+            <dd class="col-sm-10">@user.Password</dd>
+            <dt class="col-sm-2">Password2</dt>
+            <dd class="col-sm-10">@user.Password2</dd>
+            <dt class="col-sm-2">CreateDate</dt>
+            <dd class="col-sm-10">@user.CreateDate.ToShortDateString()</dd>
+        </dl>
+        <div>
+            <a href="@($"/users/edit?id={user.Id}")">Edit</a> |
+            <a href="@($"/users")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    User? user;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await DB.Users.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (user is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

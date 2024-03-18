@@ -1,0 +1,26 @@
+﻿@page "/books"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Model
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="books/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.Books">
+    <PropertyColumn Property="books => books.Title" />
+    <PropertyColumn Property="books => books.Description" />
+    <PropertyColumn Property="books => books.Pages" />
+    <PropertyColumn Property="books => books.ReleaseDate.ToShortDateString()" />
+    <PropertyColumn Property="books => books.Status" />
+
+    <TemplateColumn Context="books">
+        <a href="@($"books/edit?bookid={books.BookID}")">Edit</a> |
+        <a href="@($"books/details?bookid={books.BookID}")">Details</a> |
+        <a href="@($"books/delete?bookid={books.BookID}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>

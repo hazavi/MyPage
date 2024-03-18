@@ -1,0 +1,58 @@
+﻿@page "/users/create"
+@inject MyPage.Data.PageDbContext DB
+@using MyPage.Model
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>User</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="User" OnValidSubmit="AddUser" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="username" class="form-label">UserName:</label> 
+                <InputText id="username" @bind-Value="User.UserName" class="form-control" /> 
+                <ValidationMessage For="() => User.UserName" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label> 
+                <InputText id="password" @bind-Value="User.Password" class="form-control" /> 
+                <ValidationMessage For="() => User.Password" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="password2" class="form-label">Password2:</label> 
+                <InputText id="password2" @bind-Value="User.Password2" class="form-control" /> 
+                <ValidationMessage For="() => User.Password2" class="text-danger" /> 
+            </div>        
+@*             <div class="mb-3">
+                <label for="createdate" class="form-label">CreateDate:</label> 
+                <InputDate id="createdate" @bind-Value="User.CreateDate" class="form-control" /> 
+                <ValidationMessage For="() => User.CreateDate" class="text-danger" /> 
+            </div>     *@    
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/users">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public User User { get; set; } = new();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddUser()
+    {
+        DB.Users.Add(User);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/users");
+    }
+}

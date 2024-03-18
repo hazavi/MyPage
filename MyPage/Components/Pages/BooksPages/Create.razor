@@ -1,0 +1,82 @@
+﻿@page "/books/create"
+@inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Model
+@using BookLibrary.Model.Enum
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>Books</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Books" OnValidSubmit="AddBooks" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label> 
+                <InputText id="title" @bind-Value="Books.Title" class="form-control" /> 
+                <ValidationMessage For="() => Books.Title" class="text-danger" /> 
+            </div>
+            <div class="mb-3">
+                <label for="author" class="form-label">Author:</label>
+                <InputText id="author" @bind-Value="Books.Author.Name" class="form-control" />
+                <ValidationMessage For="() => Books.Author.Name" class="text-danger" />
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description:</label> 
+                <InputText id="description" @bind-Value="Books.Description" class="form-control" /> 
+                <ValidationMessage For="() => Books.Description" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="pages" class="form-label">Pages:</label> 
+                <InputNumber id="pages" @bind-Value="Books.Pages" class="form-control" /> 
+                <ValidationMessage For="() => Books.Pages" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="releasedate" class="form-label">ReleaseDate:</label> 
+                <InputDate id="releasedate" @bind-Value="Books.ReleaseDate" class="form-control" /> 
+                <ValidationMessage For="() => Books.ReleaseDate" class="text-danger" /> 
+            </div>        
+            <div class="form-group">
+                <label for="status">Status:</label>
+                <InputSelect id="Status" class="form-control" @bind-Value="Books.Status">
+                    <option value="">Select Status</option>
+                    @foreach (var status in Enum.GetValues<Status>())
+                    {
+                        <option value="@status">@status</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Books.Status)" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/books">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public Books Books { get; set; } = new();
+
+    public async Task AddBooks()
+    {
+        if (Books != null && Books.Author != null)
+        {
+            DB.Books.Add(Books);
+            await DB.SaveChangesAsync();
+            NavigationManager.NavigateTo("/books");
+        }
+        else
+        {
+            // Handle the case where either Books or Author is null
+            // You might want to display an error message or log the issue
+        }
+    }
+}

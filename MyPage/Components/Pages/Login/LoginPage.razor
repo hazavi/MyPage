@@ -1,0 +1,90 @@
+﻿@page "/login"
+@inject MyPage.Service.LoginService loginService
+@inject NavigationManager Nav
+@using MyPage.Model
+@using Microsoft.EntityFrameworkCore
+@inject IJSRuntime JSRuntime
+@using Microsoft.JSInterop
+@inject MyPage.Data.PageDbContext DB
+
+@* @rendermode InteractiveServer
+ *@
+
+@if (loginService.IsLoggedIn)
+{
+    <div class="text-center">
+        <p>You are already logged in. Redirecting to your profile...</p>
+        <p>If you are not redirected, <a href="/user/@loginService.Id">click here</a>.</p>
+    </div>
+}
+else
+{
+    <h1 class="text-center">Login</h1>
+
+    <div class="container w-50">
+        <EditForm Model="user" OnSubmit="Login" FormName="login">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username:</label>
+                <InputText id="username" @bind-Value="user.UserName" class="form-control" />
+                <ValidationMessage For="() => user.UserName" class="text-danger" />
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label>
+                <InputText id="password" type="password" @bind-Value="user.Password" class="form-control" />
+                <ValidationMessage For="() => user.Password" class="text-danger" />
+            </div>
+
+            @if (!string.IsNullOrEmpty(errorMessage))
+            {
+                <div class="alert alert-danger" role="alert">@errorMessage</div>
+            }
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+            <div>
+                <p>No account?  <a href="/users/create">Create Account here</a></p>
+
+
+            </div>
+        </EditForm>
+    </div>
+
+
+
+@code {
+    [SupplyParameterFromForm]
+    private User user { get; set; } = new();
+    private string errorMessage;
+
+    protected override void OnInitialized()
+    {
+        if (loginService.IsLoggedIn)
+        {
+            JSRuntime.InvokeVoidAsync("alert", "You are already Logged In..");
+            Nav.NavigateTo($"/user/{user.Id}");
+        }
+    }
+
+    private async Task Login()
+    {
+        // Replace this with your actual authentication logic
+        var authenticatedUser = await DB.Users
+            .FirstOrDefaultAsync(u => u.UserName == user.UserName && u.Password == user.Password);
+
+        if (authenticatedUser != null)
+        {
+            // Successful login, save user details and set IsLoggedIn to true
+            loginService.Id = authenticatedUser.Id;
+            loginService.UserName = authenticatedUser.UserName;
+            loginService.IsLoggedIn = true;
+
+            Nav.NavigateTo($"/user/{authenticatedUser.Id}");
+        }
+        else
+        {
+            errorMessage = "Invalid username or password. Please try again.";
+        }
+    }
+}
+
+}
