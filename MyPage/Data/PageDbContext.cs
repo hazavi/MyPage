@@ -1,6 +1,7 @@
 ﻿using BookLibrary.Model;
 using Microsoft.EntityFrameworkCore;
 using MyPage.Model;
+using StudentCard.Model;
 using System.Security.Cryptography.X509Certificates;
 
 namespace MyPage.Data
@@ -15,6 +16,7 @@ namespace MyPage.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Books> Books { get; set; }
+        public DbSet<Student> Students { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

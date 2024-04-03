@@ -1,0 +1,51 @@
+﻿@page "/students"
+
+@inject Data.PageDbContext DbContext
+
+<h3>Students</h3>
+
+<a href="students/create">Create</a>
+
+@if (students == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Education</th>
+                <th>Gender</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in students)
+            {
+                <tr>
+                    <td>@student.StudentID</td>
+                    <td>@student.Name</td>
+                    <td>@student.Education</td>
+                    <td>@student.Gender</td>
+                    <td>
+                        <a href="/students/@student.Id">View</a> |
+                        <a href="/students/edit/@student.Id">Edit</a> |
+                        <a href="/students/delete/@student.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Student> students;
+
+    protected override async Task OnInitializedAsync()
+    {
+        students = await DbContext.Students.ToListAsync();
+    }
+}

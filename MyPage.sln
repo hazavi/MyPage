@@ -5,7 +5,9 @@ VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyPage", "MyPage\MyPage.csproj", "{56143F3D-5BE2-4ABF-973A-15C4BDF15401}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLibrary", "BookLibrary\BookLibrary.csproj", "{9766C1A4-4E43-436A-90E4-17AA5C7807A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLibrary", "BookLibrary\BookLibrary.csproj", "{9766C1A4-4E43-436A-90E4-17AA5C7807A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentCard", "StudentCard\StudentCard.csproj", "{88DF646C-A1BB-4D4C-9B99-C8CE4987860E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{9766C1A4-4E43-436A-90E4-17AA5C7807A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9766C1A4-4E43-436A-90E4-17AA5C7807A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9766C1A4-4E43-436A-90E4-17AA5C7807A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88DF646C-A1BB-4D4C-9B99-C8CE4987860E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88DF646C-A1BB-4D4C-9B99-C8CE4987860E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88DF646C-A1BB-4D4C-9B99-C8CE4987860E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88DF646C-A1BB-4D4C-9B99-C8CE4987860E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

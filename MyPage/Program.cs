@@ -3,6 +3,7 @@ using MyPage.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using MyPage.Service;
+using BookLibrary.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,16 @@ builder.Services.AddDbContext<PageDbContext>(options =>
 builder.Services.AddQuickGridEntityFrameworkAdapter();;
 
 builder.Services.AddSingleton<LoginService>();
+builder.Services.AddScoped<OpenLibraryService>();
+
+// Inside ConfigureServices method of Startup.cs
+builder.Services.AddHttpClient<OpenLibraryService>(client =>
+{
+    client.BaseAddress = new Uri("http://openlibrary.org/");
+});
+
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 
 
 var app = builder.Build();

@@ -1,7 +1,6 @@
 ﻿@page "/books"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject MyPage.Data.PageDbContext DB
-@using BookLibrary.Model
 
 <PageTitle>Index</PageTitle>
 
@@ -24,3 +23,5 @@
         <a href="@($"books/delete?bookid={books.BookID}")">Delete</a>
     </TemplateColumn>
 </QuickGrid>
+
+

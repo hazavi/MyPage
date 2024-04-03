@@ -1,0 +1,122 @@
+﻿@page "/students/create"
+@inject NavigationManager Nav
+@inject Data.PageDbContext DbContext
+@rendermode InteractiveServer
+
+<h3>Create Student</h3>
+
+<EditForm Model="@newStudent" OnSubmit="@CreateStudent" FormName="create" Enhance>
+    <DataAnnotationsValidator />
+    <ValidationSummary class="text-danger" />
+    <div class="form-group">
+        <label for="studentID"><strong>Student ID</strong></label>
+        <InputNumber class="form-control" id="studentID" @bind-Value="newStudent.StudentID" readonly />
+        <ValidationMessage For="@(() => newStudent.StudentID)" />
+    </div>
+    <div class="mb-3">
+        <label for="picture" class="form-label">Picture:</label>
+        <InputFile id="picture" OnChange="OnInputFileChange" class="form-control" />
+        <ValidationMessage For="@(() => newStudent.PicURL)" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(newStudent.PicURL))
+    {
+        <div class="mb-3">
+            <label>Selected Picture:</label>
+            <br />
+            <img src="@newStudent.PicURL" alt="Selected Picture" style="max-width: 150px; max-height: 150px;" />
+        </div>
+    }
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <InputText class="form-control" id="name" @bind-Value="newStudent.Name" />
+        <ValidationMessage For="@(() => newStudent.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="school">School Name:</label>
+        <InputText class="form-control" id="school" @bind-Value="newStudent.School" />
+        <ValidationMessage For="@(() => newStudent.School)" />
+    </div>
+    <div class="form-group">
+        <label for="education">Education:</label>
+        <InputText class="form-control" id="education" @bind-Value="newStudent.Education" />
+        <ValidationMessage For="@(() => newStudent.Education)" />
+    </div>
+    <div class="form-group">
+        <label for="birthdate">Birth Date:</label>
+        <InputDate class="form-control" id="birthdate" @bind-Value="newStudent.BirthDate" />
+        <ValidationMessage For="@(() => newStudent.BirthDate)" />
+    </div>
+    <div class="form-group">
+        <label for="address">Address:</label>
+        <InputText class="form-control" id="address" @bind-Value="newStudent.Address" />
+        <ValidationMessage For="@(() => newStudent.Address)" />
+    </div>
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select class="form-control" id="gender" @bind="newStudent.Gender">
+            <option value="">Select Gender</option>
+            <option value="1">Male</option>
+            <option value="2">Female</option>
+            <option value="3">Other</option>
+        </select>
+        <ValidationMessage For="@(() => newStudent.Gender)" />
+    </div>
+    <div class="form-group">
+        <label for="sport">Sport:</label>
+        <InputText class="form-control" id="sport" @bind-Value="newStudent.Sport" />
+        <ValidationMessage For="@(() => newStudent.Sport)" />
+    </div>
+    <div class="form-group">
+        <label for="hobbies">Hobbies:</label>
+        <InputText class="form-control" id="hobbies" @bind-Value="hobbiesInput" />
+        <button type="button" class="btn btn-primary mt-2" @onclick="AddHobby">Add Hobby</button>
+        <ul class="list-group mt-2">
+            @foreach (var hobby in newStudent.Hobbies)
+            {
+                <li class="list-group-item">@hobby</li>
+            }
+        </ul>
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    Student newStudent = new Student();
+    string hobbiesInput;
+    private string base64String;
+    private string ErrorMessage { get; set; }
+    private IBrowserFile? selectedFile;
+    private string imageBase64;
+
+    private async Task CreateStudent()
+    {
+        DbContext.Students.Add(newStudent);
+        await DbContext.SaveChangesAsync();
+        Nav.NavigateTo("/students");
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            using var memoryStream = new MemoryStream();
+            await file.OpenReadStream().CopyToAsync(memoryStream);
+            imageBase64 = $"data:image/png;base64,{Convert.ToBase64String(memoryStream.ToArray())}";
+            newStudent.PicURL = imageBase64;
+        }
+    }
+
+    private void AddHobby()
+    {
+        if (!string.IsNullOrWhiteSpace(hobbiesInput))
+        {
+            newStudent.Hobbies.Add(hobbiesInput);
+            hobbiesInput = string.Empty;
+        }
+    }
+}

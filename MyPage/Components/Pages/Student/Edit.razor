@@ -1,0 +1,146 @@
+﻿@page "/students/edit/{studentId}"
+@inject NavigationManager Nav
+@inject Data.PageDbContext DbContext
+@rendermode InteractiveServer
+
+<h3>Edit Student</h3>
+
+<EditForm Model="existingStudent" OnSubmit="@UpdateStudent" FormName="edit" Enhance>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label for="studentID"><strong>Student ID</strong></label>
+        <InputNumber class="form-control" id="studentID" @bind-Value="existingStudent.StudentID" readonly />
+        <ValidationMessage For="@(() => existingStudent.StudentID)" />
+    </div>
+    <div class="mb-3">
+        <label for="picture" class="form-label">Picture:</label>
+        <InputFile id="picture" OnChange="OnInputFileChange" class="form-control" />
+        <ValidationMessage For="@(() => existingStudent.PicURL)" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(existingStudent.PicURL))
+    {
+        <div class="mb-3">
+            <label>Selected Picture:</label>
+            <br />
+            <img src="@existingStudent.PicURL" alt="Selected Picture" style="max-width: 150px; max-height: 150px;" />
+        </div>
+    }
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <InputText class="form-control" id="name" @bind-Value="existingStudent.Name" />
+        <ValidationMessage For="@(() => existingStudent.Name)" />
+    </div>
+    <div class="form-group">
+        <label for="school">School Name:</label>
+        <InputText class="form-control" id="school" @bind-Value="existingStudent.School" />
+        <ValidationMessage For="@(() => existingStudent.School)" />
+    </div>
+    <div class="form-group">
+        <label for="education">Education:</label>
+        <InputText class="form-control" id="education" @bind-Value="existingStudent.Education" />
+        <ValidationMessage For="@(() => existingStudent.Education)" />
+    </div>
+    <div class="form-group">
+        <label for="birthdate">Birth Date:</label>
+        <InputDate class="form-control" id="birthdate" @bind-Value="existingStudent.BirthDate" />
+        <ValidationMessage For="@(() => existingStudent.BirthDate)" />
+    </div>
+    <div class="form-group">
+        <label for="address">Address:</label>
+        <InputText class="form-control" id="address" @bind-Value="existingStudent.Address" />
+        <ValidationMessage For="@(() => existingStudent.Address)" />
+    </div>
+    <div class="form-group">
+        <label for="gender">Gender:</label>
+        <select class="form-control" id="gender" @bind="existingStudent.Gender">
+            <option value="">Select Gender</option>
+            <option value="1">Male</option>
+            <option value="2">Female</option>
+            <option value="3">Other</option>
+        </select>
+        <ValidationMessage For="@(() => existingStudent.Gender)" />
+    </div>
+    <div class="form-group">
+        <label for="sport">Sport:</label>
+        <InputText class="form-control" id="sport" @bind-Value="existingStudent.Sport" />
+        <ValidationMessage For="@(() => existingStudent.Sport)" />
+    </div>
+    <div class="form-group">
+        <label for="hobbies">Hobbies:</label>
+        <InputText class="form-control" id="hobbies" @bind-Value="hobbiesInput" />
+        <button type="button" class="btn btn-primary mt-2" @onclick="AddHobby">Add Hobby</button>
+        <ul class="list-group mt-2">
+            @foreach (var hobby in existingStudent.Hobbies)
+            {
+                <li class="list-group-item">@hobby</li>
+            }
+        </ul>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string StudentId { get; set; }
+
+    private Student existingStudent;
+    string hobbiesInput;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!int.TryParse(StudentId, out int id))
+        {
+            // Handle invalid StudentId
+            return;
+        }
+
+        existingStudent = await DbContext.Students.FindAsync(id);
+        hobbiesInput = string.Join(", ", existingStudent.Hobbies);
+    }
+
+    public async Task UpdateStudent()
+    {
+        // Update the properties of the existing student with the values from the form
+        existingStudent.Hobbies.Clear();
+
+        // Add new hobbies from the input field
+        if (!string.IsNullOrWhiteSpace(hobbiesInput))
+        {
+            var hobbies = hobbiesInput.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var hobby in hobbies)
+            {
+                existingStudent.Hobbies.Add(hobby.Trim());
+            }
+        }
+
+        DbContext.Update(existingStudent);
+        await DbContext.SaveChangesAsync();
+
+        Nav.NavigateTo("/students");
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            using var memoryStream = new MemoryStream();
+            await file.OpenReadStream().CopyToAsync(memoryStream);
+            string imageBase64 = $"data:image/png;base64,{Convert.ToBase64String(memoryStream.ToArray())}";
+            existingStudent.PicURL = imageBase64;
+        }
+    }
+
+    private void AddHobby()
+    {
+        if (!string.IsNullOrWhiteSpace(hobbiesInput))
+        {
+            existingStudent.Hobbies.Add(hobbiesInput.Trim());
+            hobbiesInput = string.Empty;
+        }
+    }
+
+}
