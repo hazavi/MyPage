@@ -60,9 +60,10 @@ else
     {
         if (loginService.IsLoggedIn)
         {
-            JSRuntime.InvokeVoidAsync("alert", "You are already Logged In..");
-            Nav.NavigateTo($"/user/{user.Id}");
+            JSRuntime.InvokeVoidAsync("showAlert", "You are already Logged In..");
+            Nav.NavigateTo($"/");
         }
+
     }
 
     private async Task Login()
@@ -78,7 +79,7 @@ else
             loginService.UserName = authenticatedUser.UserName;
             loginService.IsLoggedIn = true;
 
-            Nav.NavigateTo($"/user/{authenticatedUser.Id}");
+            Nav.NavigateTo($"/");
         }
         else
         {

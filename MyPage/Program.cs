@@ -16,6 +16,8 @@ builder.Services.AddDbContext<PageDbContext>(options =>
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();;
 
+builder.Services.AddBlazorBootstrap();
+
 builder.Services.AddSingleton<LoginService>();
 builder.Services.AddScoped<OpenLibraryService>();
 

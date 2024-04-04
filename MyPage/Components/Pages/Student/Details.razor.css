@@ -1,0 +1,50 @@
+﻿.card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 200px auto;
+    max-width: 60%;
+    max-height: auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+}
+
+.picture-container {
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-right: 20px;
+
+}
+
+.card-img-top {
+    width: 50%;
+    height: auto;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column; 
+    margin-left: -200px;
+}
+
+.card-title {
+    font-weight: bold;
+    font-size: 1em;
+}
+.name {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.row {
+}
+
+.col-sm-3 {
+    font-weight: bold;
+    color: black;
+}
+
+.col-sm-9 {
+    margin-bottom: 5px;
+}

@@ -19,6 +19,7 @@ namespace BookLibrary.Model
         public DateTime ReleaseDate { get; set; }
         public Status Status { get; set; }
         public int IsFavorite { get; set; }
+        public string PhotoCover { get; set; }
 
     }
 }

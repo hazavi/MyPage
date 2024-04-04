@@ -1,49 +1,31 @@
-﻿@page "/students/delete/{id:int}"
-@inject NavigationManager Nav
-@inject Data.PageDbContext DbContext
+﻿@inject MyPage.Data.PageDbContext DbContext
 
-<h3>Delete Student</h3>
-
-@if (student == null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <dl class="row">
-        <dt class="col-sm-2">Student ID</dt>
-        <dd class="col-sm-10">@student.StudentID</dd>
-
-        <dt class="col-sm-2">Name</dt>
-        <dd class="col-sm-10">@student.Name</dd>
-
-        <dt class="col-sm-2">Education</dt>
-        <dd class="col-sm-10">@student.Education</dd>
-
-        <dt class="col-sm-2">Gender</dt>
-        <dd class="col-sm-10">@student.Gender</dd>
-    </dl>
-    <button class="btn btn-danger" @onclick="DeleteStudent">Delete</button>
-}
+<div class="row">
+    <div class="col-5 col-md-3 text-end">Student Id :</div>
+    <div class="col-7 col-md-9">@student?.StudentID</div>
+</div>
+<div class="row">
+    <div class="col-5 col-md-3 text-end">Name :</div>
+    <div class="col-7 col-md-9">@student?.Name</div>
+</div>
+<div class="row">
+    <div class="col-5 col-md-3 text-end">School :</div>
+    <div class="col-7 col-md-9">@student?.School</div>
+</div>
+<div class="row">
+    <div class="col-5 col-md-3 text-end">Education :</div>
+    <div class="col-7 col-md-9">@student?.Education</div>
+</div>
 
 @code {
-    [Parameter]
-    public int Id { get; set; }
+    private Student? student;
 
-    private Student student;
+    [Parameter] public int StudentId { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override async void OnInitialized()
     {
-        student = await DbContext.Students.FindAsync(Id);
-    }
+        student = await DbContext.Students.FindAsync(StudentId);
 
-    private async Task DeleteStudent()
-    {
-        if (student != null)
-        {
-            DbContext.Students.Remove(student);
-            await DbContext.SaveChangesAsync();
-            Nav.NavigateTo("/students");
-        }
+        base.OnInitialized();
     }
 }

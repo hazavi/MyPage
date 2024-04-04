@@ -1,10 +1,13 @@
 ﻿@page "/students"
-
+@inject NavigationManager Nav
 @inject Data.PageDbContext DbContext
+@rendermode InteractiveServer
 
 <h3>Students</h3>
 
 <a href="students/create">Create</a>
+
+<ConfirmDialog @ref="dialog" />
 
 @if (students == null)
 {
@@ -12,40 +15,96 @@
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Student ID</th>
-                <th>Name</th>
-                <th>Education</th>
-                <th>Gender</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var student in students)
-            {
-                <tr>
-                    <td>@student.StudentID</td>
-                    <td>@student.Name</td>
-                    <td>@student.Education</td>
-                    <td>@student.Gender</td>
-                    <td>
-                        <a href="/students/@student.Id">View</a> |
-                        <a href="/students/edit/@student.Id">Edit</a> |
-                        <a href="/students/delete/@student.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+
+    <Grid TItem="Student"
+          AllowFiltering="true"
+          AllowSorting="true"
+          Class="table table-hover"
+          DataProvider="StudentsData"
+          FiltersRowCssClass="bg-warning text-white bg-opacity-25 border-bottom-0"
+          HeaderRowCssClass="bg-warning text-white border-bottom-0"
+          AllowPaging="true"
+          PageSize="10"
+          PageSizeSelectorVisible="true"
+          PageSizeSelectorItems="@(new int[] { 5,10,20 })"
+          Responsive="true">
+
+        <GridColumn TItem="Student" HeaderText="Id" PropertyName="Id" SortKeySelector="item => item.Id">
+            @context.Id
+        </GridColumn>
+
+        <GridColumn TItem="Student" HeaderText="Student ID" PropertyName="StudentID" SortKeySelector="item => item.StudentID">
+            @context.StudentID
+        </GridColumn>
+
+        <GridColumn TItem="Student" HeaderText="School" PropertyName="School" SortKeySelector="item => item.School">
+            @context.School
+        </GridColumn>
+
+        <GridColumn TItem="Student" HeaderText="Education" PropertyName="Education" SortKeySelector="item => item.Education">
+            @context.Education
+        </GridColumn>
+
+        <GridColumn TItem="Student" HeaderText="Name" PropertyName="Name" SortKeySelector="item => item.Name">
+            @context.Name
+        </GridColumn>
+        <GridColumn TItem="Student" HeaderText="Actions" Filterable="false" Sortable="false" Style="width: 200px">
+            <ItemTemplate>
+                <a href="/students/@context.Id">View</a> |
+                <a href="/students/edit/@context.Id">Edit</a> |
+                <Button @onclick="() => DeleteStudent(context.Id)">
+                    <Icon Name="IconName.Trash" />
+                </Button>
+            </ItemTemplate>
+        </GridColumn>
+
+    </Grid>
 }
 
 @code {
     private List<Student> students;
 
+    private ConfirmDialog dialog = default!;
+
+    [Inject] ToastService ToastService { get; set; } = default!;
+
     protected override async Task OnInitializedAsync()
     {
         students = await DbContext.Students.ToListAsync();
+    }
+
+    private async Task<GridDataProviderResult<Student>> StudentsData(GridDataProviderRequest<Student> request)
+    {
+        return await Task.FromResult(request.ApplyTo(students.AsQueryable()));
+    }
+
+    private async Task DeleteStudent(int id)
+    {
+        var parameters = new Dictionary<string, object>();
+        parameters.Add("StudentId", id);
+
+        var confirmation = await dialog.ShowAsync<Delete>("Are you sure you want to delete this student?", parameters);
+
+        if (confirmation)
+        {
+            // Call the API to delete the student
+            var studentToDelete = students.FirstOrDefault(s => s.Id == id);
+            if (studentToDelete != null)
+            {
+                DbContext.Students.Remove(studentToDelete);
+                await DbContext.SaveChangesAsync();
+
+                // Show acknowledgment to the user
+                ToastService.Notify(new ToastMessage(ToastType.Success, $"Student deleted successfully."));
+                
+                Nav.NavigateTo(Nav.Uri, forceLoad: true);
+
+            }
+        }
+        else
+        {
+            // Show cancellation message
+            ToastService.Notify(new ToastMessage(ToastType.Secondary, $"Delete action canceled."));
+        }
     }
 }

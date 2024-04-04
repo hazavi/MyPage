@@ -1,7 +1,6 @@
 ﻿@page "/students/{id:int}"
 @inject Data.PageDbContext DbContext
 
-<h3>View Student</h3>
 
 @if (student == null)
 {
@@ -9,20 +8,64 @@
 }
 else
 {
-    <dl class="row">
-        <dt class="col-sm-2">Student ID</dt>
-        <dd class="col-sm-10">@student.StudentID</dd>
+    <div class="card">
+        @if (!string.IsNullOrEmpty(student.PicURL))
+        {
+            <div class="picture-container">
+                <p class="card-title">Student ID: @student.StudentID</p>
+                <img class="card-img-top" src="@student.PicURL" alt="Student Picture">
+                
 
-        <dt class="col-sm-2">Name</dt>
-        <dd class="col-sm-10">@student.Name</dd>
+            </div>
+        }
 
-        <dt class="col-sm-2">Education</dt>
-        <dd class="col-sm-10">@student.Education</dd>
 
-        <dt class="col-sm-2">Gender</dt>
-        <dd class="col-sm-10">@student.Gender</dd>
-    </dl>
+        <div class="card-body">
+            <p class="name">@student.Name</p>
+            <div class="row">
+                <div class="col-sm-6">
+                    <dl class="row">
+                        <dt class="col-sm-6">School:</dt>
+                        <dd class="col-sm-9">@student.School</dd>
+                        <dt class="col-sm-6">Education:</dt>
+                        <dd class="col-sm-9">@student.Education</dd>
+                        <dt class="col-sm-6">Gender:</dt>
+                        <dd class="col-sm-9">@student.Gender</dd>
+                    </dl>
+                </div>
+                <div class="col-sm-6">
+                    <dl class="row">
+                        <dt class="col-sm-6">Birth Date:</dt>
+                        <dd class="col-sm-9">@student.BirthDate.ToShortDateString()</dd>
+                        <dt class="col-sm-6">Address:</dt>
+                        <dd class="col-sm-9">@student.Address</dd>
+                        <dt class="col-sm-6">Sport:</dt>
+                        <dd class="col-sm-9">@student.Sport</dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-sm-12">
+                    <dl class="row">
+                        <dt class="col-sm-3">Hobbies:</dt>
+                        <dd class="col-sm-6">
+                            <ul>
+                                @foreach (var hobby in student.Hobbies)
+                                {
+                                    <li>@hobby</li>
+                                }
+                            </ul>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
 }
+
 
 @code {
     [Parameter]
