@@ -6,9 +6,12 @@
 @inject IJSRuntime JSRuntime
 @using Microsoft.JSInterop
 @inject MyPage.Data.PageDbContext DB
+@inject ToastService toastService
 
 @* @rendermode InteractiveServer
  *@
+
+<Toasts class="p-3" AutoHide="true" Delay="3000" Messages="messages" Placement="ToastsPlacement.TopRight" />
 
 @if (loginService.IsLoggedIn)
 {
@@ -43,7 +46,7 @@ else
             <button type="submit" class="btn btn-primary w-100">Login</button>
             <div>
                 <p>No account?  <a href="/users/create">Create Account here</a></p>
-
+                
 
             </div>
         </EditForm>
@@ -51,16 +54,34 @@ else
 
 
 
-@code {
+    @code {
     [SupplyParameterFromForm]
     private User user { get; set; } = new();
     private string errorMessage;
+
+    [Inject] protected ToastService ToastService { get; set; } = default!;
+
+    List<ToastMessage> messages = new List<ToastMessage>();
+
+    private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));
+
+    private ToastMessage CreateToastMessage(ToastType toastType)
+    {
+        string message = toastType == ToastType.Success
+            ? $"Logged in successfully!"
+            : $"Login fai!";
+
+        return new ToastMessage
+            {
+                Type = toastType,
+                Message = message,
+            };
+    }
 
     protected override void OnInitialized()
     {
         if (loginService.IsLoggedIn)
         {
-            JSRuntime.InvokeVoidAsync("showAlert", "You are already Logged In..");
             Nav.NavigateTo($"/");
         }
 
@@ -68,24 +89,28 @@ else
 
     private async Task Login()
     {
-        // Replace this with your actual authentication logic
         var authenticatedUser = await DB.Users
             .FirstOrDefaultAsync(u => u.UserName == user.UserName && u.Password == user.Password);
 
         if (authenticatedUser != null)
         {
-            // Successful login, save user details and set IsLoggedIn to true
             loginService.Id = authenticatedUser.Id;
             loginService.UserName = authenticatedUser.UserName;
             loginService.IsLoggedIn = true;
 
+            ToastService.Notify(new(ToastType.Success, $"loggin in successfully."));
+
+            await Task.Delay(5000);
             Nav.NavigateTo($"/");
+
         }
         else
         {
             errorMessage = "Invalid username or password. Please try again.";
         }
-    }
-}
 
+
+    }
+
+  }
 }

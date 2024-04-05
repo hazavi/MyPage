@@ -4,8 +4,10 @@
 @inject NavigationManager Nav
 @inject IJSRuntime JSRuntime
 @rendermode InteractiveServer
+@inject ToastService toastService
 
 <h3>Logging Out...</h3>
+
 
 
 @code {
@@ -19,9 +21,12 @@
             loginService.UserName = string.Empty;
             loginService.IsLoggedIn = false;
 
-            await Task.Delay(1000);
+            toastService.Notify(new(ToastType.Success, $"Logged out successfully."));
 
+
+            await Task.Delay(3000);
             Nav.NavigateTo("/");
+            
         }
         else
         {

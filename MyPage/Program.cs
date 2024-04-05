@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using MyPage.Service;
 using BookLibrary.Service;
+using BlazorBootstrap;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,7 @@ builder.Services.AddDbContext<PageDbContext>(options =>
 builder.Services.AddQuickGridEntityFrameworkAdapter();;
 
 builder.Services.AddBlazorBootstrap();
+//builder.Services.AddScoped<ToastService>();
 
 builder.Services.AddSingleton<LoginService>();
 builder.Services.AddScoped<OpenLibraryService>();
