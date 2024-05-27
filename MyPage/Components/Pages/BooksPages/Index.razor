@@ -1,27 +1,100 @@
 ﻿@page "/books"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Model
+@using BookLibrary.Model.Enum
+@rendermode InteractiveServer
 
 <PageTitle>Index</PageTitle>
 
-<h1>Index</h1>
 
-<p>
-    <a href="books/create">Create New</a>
-</p>
+<div class="d-flex justify-content-end mb-3">
+    <a href="books/create" class="btn btn-primary">Create New</a>
+</div>
 
-<QuickGrid Class="table" Items="DB.Books">
-    <PropertyColumn Property="books => books.Title" />
-    <PropertyColumn Property="books => books.Description" />
-    <PropertyColumn Property="books => books.Pages" />
-    <PropertyColumn Property="books => books.ReleaseDate.ToShortDateString()" />
-    <PropertyColumn Property="books => books.Status" />
-
-    <TemplateColumn Context="books">
-        <a href="@($"books/edit?bookid={books.BookID}")">Edit</a> |
-        <a href="@($"books/details?bookid={books.BookID}")">Details</a> |
-        <a href="@($"books/delete?bookid={books.BookID}")">Delete</a>
-    </TemplateColumn>
-</QuickGrid>
+<div class="form-group mb-3">
+    <label for="statusFilter" class="form-label">Filter by Status:</label>
+    <div class="col-auto">
+        <select id="statusFilter" class="form-select-sm custom-select select-box" @bind="SelectedStatus">
+            <option value="">All Books</option>
+            @foreach (var status in Enum.GetValues<Status>())
+            {
+                <option value="@status">@status</option>
+            }
+        </select>
+    </div>
+</div>
 
 
+
+<div class="row">
+    @foreach (var book in filteredBooks)
+    {
+        <div class="col-md-3 mb-3">
+            <div class="card book-card h-100">
+                <img src="data:image/png;base64,@book.BookImgCover" class="card-img-top" alt="@book.Title" style="height: 250px; width: auto; object-fit: contain;">
+                <div class="card-body">
+                    <h5 class="card-title"><strong>@book.Title</strong></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">by @book.Author</h6>
+                    <p class="card-text"><strong>Status:</strong> @book.Status</p>
+                </div>
+                <div class="card-footer">
+                    <a href="@($"books/edit?bookid={book.BookID}")" class="btn btn-outline-primary btn-sm">Edit</a>
+                    <a href="@($"books/details?bookid={book.BookID}")" class="btn btn-outline-warning btn-sm">View</a>
+                    <a href="@($"books/delete?bookid={book.BookID}")" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+@code {
+    private string _currentSelectedStatus = string.Empty;
+    private List<Books> allBooks = new();
+    private List<Books> filteredBooks = new();
+
+    protected override void OnInitialized()
+    {
+        LoadBooks();
+    }
+
+    private void LoadBooks()
+    {
+        allBooks = DB.Books.ToList();
+        FilterBooks();
+    }
+
+    private string SelectedStatus
+    {
+        get => _currentSelectedStatus;
+        set
+        {
+            if (_currentSelectedStatus != value)
+            {
+                _currentSelectedStatus = value;
+                FilterBooks();
+            }
+        }
+    }
+
+    private void FilterBooks()
+    {
+        if (string.IsNullOrEmpty(_currentSelectedStatus))
+        {
+            filteredBooks = allBooks;
+        }
+        else
+        {
+            Status status;
+            if (Enum.TryParse(_currentSelectedStatus, out status))
+            {
+                filteredBooks = allBooks.Where(b => b.Status == status).ToList();
+            }
+            else
+            {
+                filteredBooks = allBooks;
+            }
+        }
+    }
+}

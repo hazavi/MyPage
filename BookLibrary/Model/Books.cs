@@ -15,6 +15,7 @@ namespace BookLibrary.Model
 
         [Required(ErrorMessage = "Please add a Title")]
         public string Title { get; set; }
+        [Required(ErrorMessage = "Please add description")]
         public string Description { get; set; }
 
         [Required(ErrorMessage = "Pages is required")]

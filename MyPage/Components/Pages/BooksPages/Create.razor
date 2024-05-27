@@ -13,14 +13,14 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <EditForm method="post" Model="Books" OnValidSubmit="AddBooks" FormName="create" Enhance>
+        <EditForm method="post" Model="Books" OnValidSubmit="AddBooks" FormName="create">
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" />
 
             <div class="mb-3">
                 <label for="bookimgcover" class="form-label">Book Cover Image:</label>
                 <InputFile id="bookimgcover" OnChange="OnInputFileChange" class="form-control" />
-                <div class="img-thumbnail mt-2" style="max-width: 200px; max-height: 200px; overflow: hidden;">
+                <div class="img-thumbnail mt-2" style="max-width: 200px; max-height: 500px; overflow: hidden;">
                     <img src="@ImagePreviewUrl" alt="Book Cover Image" style="width: 100%; height: auto;" />
                 </div>
                 <ValidationMessage For="@(() => Books.BookImgCover)" />
