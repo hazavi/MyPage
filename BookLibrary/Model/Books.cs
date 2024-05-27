@@ -12,10 +12,16 @@ namespace BookLibrary.Model
     {
         [Key]
         public int BookID { get; set; }
+
+        [Required(ErrorMessage = "Please add a Title")]
         public string Title { get; set; }
         public string Description { get; set; }
+
+        [Required(ErrorMessage = "Pages is required")]
         public int Pages { get; set; }
-        public Author Author { get; set; } = new Author();
+
+        [Required(ErrorMessage = "Author is required")]
+        public string Author { get; set; }
         public DateTime ReleaseDate { get; set; }
         public Status Status { get; set; }
         public int IsFavorite { get; set; }

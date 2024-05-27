@@ -3,6 +3,7 @@
 @using BookLibrary.Model
 @using BookLibrary.Model.Enum
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <PageTitle>Create</PageTitle>
 
@@ -15,31 +16,41 @@
         <EditForm method="post" Model="Books" OnValidSubmit="AddBooks" FormName="create" Enhance>
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" />
+
             <div class="mb-3">
-                <label for="title" class="form-label">Title:</label> 
-                <InputText id="title" @bind-Value="Books.Title" class="form-control" /> 
-                <ValidationMessage For="() => Books.Title" class="text-danger" /> 
+                <label for="bookimgcover" class="form-label">Book Cover Image:</label>
+                <InputFile id="bookimgcover" OnChange="OnInputFileChange" class="form-control" />
+                <div class="img-thumbnail mt-2" style="max-width: 200px; max-height: 200px; overflow: hidden;">
+                    <img src="@ImagePreviewUrl" alt="Book Cover Image" style="width: 100%; height: auto;" />
+                </div>
+                <ValidationMessage For="@(() => Books.BookImgCover)" />
+            </div>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label>
+                <InputText id="title" @bind-Value="Books.Title" class="form-control" />
+                <ValidationMessage For="() => Books.Title" class="text-danger" />
             </div>
             <div class="mb-3">
                 <label for="author" class="form-label">Author:</label>
-                <InputText id="author" @bind-Value="Books.Author.Name" class="form-control" />
-                <ValidationMessage For="() => Books.Author.Name" class="text-danger" />
+                <InputText id="author" @bind-Value="Books.Author" class="form-control" />
+                <ValidationMessage For="() => Books.Author" class="text-danger" />
             </div>
             <div class="mb-3">
-                <label for="description" class="form-label">Description:</label> 
-                <InputText id="description" @bind-Value="Books.Description" class="form-control" /> 
-                <ValidationMessage For="() => Books.Description" class="text-danger" /> 
-            </div>        
+                <label for="description" class="form-label">Description:</label>
+                <InputText id="description" @bind-Value="Books.Description" class="form-control" />
+                <ValidationMessage For="() => Books.Description" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="pages" class="form-label">Pages:</label> 
-                <InputNumber id="pages" @bind-Value="Books.Pages" class="form-control" /> 
-                <ValidationMessage For="() => Books.Pages" class="text-danger" /> 
-            </div>        
+                <label for="pages" class="form-label">Pages:</label>
+                <InputNumber id="pages" @bind-Value="Books.Pages" class="form-control" />
+                <ValidationMessage For="() => Books.Pages" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="releasedate" class="form-label">ReleaseDate:</label> 
-                <InputDate id="releasedate" @bind-Value="Books.ReleaseDate" class="form-control" /> 
-                <ValidationMessage For="() => Books.ReleaseDate" class="text-danger" /> 
-            </div>        
+                <label for="releasedate" class="form-label">ReleaseDate:</label>
+                <InputDate id="releasedate" @bind-Value="Books.ReleaseDate" class="form-control" />
+                <ValidationMessage For="() => Books.ReleaseDate" class="text-danger" />
+            </div>
             <div class="form-group">
                 <label for="status">Status:</label>
                 <InputSelect id="Status" class="form-control" @bind-Value="Books.Status">
@@ -51,6 +62,7 @@
                 </InputSelect>
                 <ValidationMessage For="@(() => Books.Status)" />
             </div>
+
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
     </div>
@@ -61,9 +73,9 @@
 </div>
 
 @code {
-
     [SupplyParameterFromForm]
     public Books Books { get; set; } = new();
+    private string ImagePreviewUrl { get; set; } = string.Empty;
 
     public async Task AddBooks()
     {
@@ -77,6 +89,21 @@
         {
             // Handle the case where either Books or Author is null
             // You might want to display an error message or log the issue
+        }
+    }
+
+    private async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            var buffer = new byte[file.Size];
+            await file.OpenReadStream().ReadAsync(buffer);
+
+            var base64String = Convert.ToBase64String(buffer);
+            ImagePreviewUrl = $"data:image/png;base64,{base64String}";
+
+            Books.BookImgCover = base64String; // Store the image as base64 string in the model
         }
     }
 }
