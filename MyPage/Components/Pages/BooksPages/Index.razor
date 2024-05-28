@@ -7,9 +7,9 @@
 
 <PageTitle>Index</PageTitle>
 
-
 <div class="d-flex justify-content-end mb-3">
     <a href="books/create" class="btn btn-primary">Create New</a>
+    <a href="books/favorites" class="btn btn-secondary ms-2">View Favorites</a>
 </div>
 
 <div class="form-group mb-3">
@@ -24,8 +24,6 @@
         </select>
     </div>
 </div>
-
-
 
 <div class="row">
     @foreach (var book in filteredBooks)
@@ -42,12 +40,21 @@
                     <a href="@($"books/edit?bookid={book.BookID}")" class="btn btn-outline-primary btn-sm">Edit</a>
                     <a href="@($"books/details?bookid={book.BookID}")" class="btn btn-outline-warning btn-sm">View</a>
                     <a href="@($"books/delete?bookid={book.BookID}")" class="btn btn-danger btn-sm">Delete</a>
+                    <button class="btn btn-outline-success btn-sm" @onclick="() => ToggleFavorite(book.BookID)">
+                        @if (book.IsFavorite == 1)
+                        {
+                            <Icon Name="IconName.StarFill" Size="IconSize.x6" />
+                        }
+                        else
+                        {
+                            <Icon Name="IconName.Star" Size="IconSize.x6" />
+                        }
+                    </button>
                 </div>
             </div>
         </div>
     }
 </div>
-
 
 @code {
     private string _currentSelectedStatus = string.Empty;
@@ -95,6 +102,17 @@
             {
                 filteredBooks = allBooks;
             }
+        }
+    }
+
+    private void ToggleFavorite(int bookId)
+    {
+        var book = allBooks.FirstOrDefault(b => b.BookID == bookId);
+        if (book != null)
+        {
+            book.IsFavorite = book.IsFavorite == 1 ? 0 : 1;
+            DB.SaveChanges();
+            FilterBooks(); // Refresh the filtered books list
         }
     }
 }

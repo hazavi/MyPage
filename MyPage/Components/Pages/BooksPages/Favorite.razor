@@ -1,0 +1,66 @@
+﻿@page "/books/favorites"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Model
+@using BookLibrary.Model.Enum
+@rendermode InteractiveServer
+
+<PageTitle>Favorite Books</PageTitle>
+
+<h3>Favorite Books</h3>
+
+<div class="row">
+    @foreach (var book in favoriteBooks)
+    {
+        <div class="col-md-3 mb-3">
+            <div class="card book-card h-100">
+                <img src="data:image/png;base64,@book.BookImgCover" class="card-img-top" alt="@book.Title" style="height: 250px; width: auto; object-fit: contain;">
+                <div class="card-body">
+                    <h5 class="card-title"><strong>@book.Title</strong></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">by @book.Author</h6>
+                    <p class="card-text"><strong>Status:</strong> @book.Status</p>
+                </div>
+                <div class="card-footer">
+                    <a href="@($"books/edit?bookid={book.BookID}")" class="btn btn-outline-primary btn-sm">Edit</a>
+                    <a href="@($"books/details?bookid={book.BookID}")" class="btn btn-outline-warning btn-sm">View</a>
+                    <a href="@($"books/delete?bookid={book.BookID}")" class="btn btn-danger btn-sm">Delete</a>
+                    <button class="btn btn-success btn-sm" @onclick="() => ToggleFavorite(book.BookID)">
+                        @if (book.IsFavorite == 1)
+                        {
+                            <Icon Name="IconName.StarFill" />
+                        }
+                        else
+                        {
+                            <Icon Name="IconName.Star" />
+                        }
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Books> favoriteBooks = new();
+
+    protected override void OnInitialized()
+    {
+        LoadFavoriteBooks();
+    }
+
+    private void LoadFavoriteBooks()
+    {
+        favoriteBooks = DB.Books.Where(b => b.IsFavorite == 1).ToList();
+    }
+
+    private void ToggleFavorite(int bookId)
+    {
+        var book = favoriteBooks.FirstOrDefault(b => b.BookID == bookId);
+        if (book != null)
+        {
+            book.IsFavorite = book.IsFavorite == 1 ? 0 : 1;
+            DB.SaveChanges();
+            LoadFavoriteBooks(); // Refresh the favorite books list
+        }
+    }
+}

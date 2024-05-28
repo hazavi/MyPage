@@ -103,3 +103,20 @@
         overflow-y: auto;
     }
 }
+
+/*NAV SUB ITEMS*/
+.nav-sub-item {
+    padding-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+    .nav-sub-item .nav-link {
+        display: flex;
+        align-items: center;
+        font-size: 0.9em; /* Make the sub-item text slightly smaller */
+    }
+
+        .nav-sub-item .nav-link Icon {
+            font-size: 0.75em; /* Adjust icon size for sub-items */
+        }
