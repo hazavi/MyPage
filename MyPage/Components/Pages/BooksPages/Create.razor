@@ -4,73 +4,83 @@
 @using BookLibrary.Model.Enum
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
+@inject MyPage.Service.LoginService loginService
 
 <PageTitle>Create</PageTitle>
 
-<h1>Create</h1>
 
-<h4>Books</h4>
 <hr />
-<div class="row">
-    <div class="col-md-8">
-        <EditForm Model="@Books" OnValidSubmit="@AddBooks">
-            <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" />
+@if (loginService.IsLoggedIn && loginService.IsAdmin)
+{
+    <h1>Add Create</h1>
 
-            <div class="mb-3">
-                <label for="bookimgcover" class="form-label">Book Cover Image:</label>
-                <InputFile id="bookimgcover" OnChange="@OnInputFileChange" class="form-control" />
-                <ValidationMessage For="@(() => Books.BookImgCover)" />
-            </div>
+    <div class="row">
+        <div class="col-md-8">
+            <EditForm Model="@Books" OnValidSubmit="@AddBooks">
+                <DataAnnotationsValidator />
+                <ValidationSummary class="text-danger" />
 
-            <div class="mb-3">
-                <label for="title" class="form-label">Title:</label>
-                <InputText id="title" @bind-Value="@Books.Title" class="form-control" />
-                <ValidationMessage For="@(() => Books.Title)" />
-            </div>
-            <div class="mb-3">
-                <label for="author" class="form-label">Author:</label>
-                <InputText id="author" @bind-Value="@Books.Author" class="form-control" />
-                <ValidationMessage For="@(() => Books.Author)" />
-            </div>
-            <div class="mb-3">
-                <label for="description" class="form-label">Description:</label>
-                <InputText id="description" @bind-Value="@Books.Description" class="form-control" />
-                <ValidationMessage For="@(() => Books.Description)" />
-            </div>
-            <div class="mb-3">
-                <label for="pages" class="form-label">Pages:</label>
-                <InputNumber id="pages" @bind-Value="@Books.Pages" class="form-control" />
-                <ValidationMessage For="@(() => Books.Pages)" />
-            </div>
-            <div class="mb-3">
-                <label for="releasedate" class="form-label">Release Date:</label>
-                <InputDate id="releasedate" @bind-Value="@Books.ReleaseDate" class="form-control" />
-                <ValidationMessage For="@(() => Books.ReleaseDate)" />
-            </div>
-            <div class="form-group">
-                <label for="status" class="form-label">Status:</label>
-                <InputSelect id="status" @bind-Value="@Books.Status" class="form-control">
-                    <option value="">Select Status</option>
-                    @foreach (var status in Enum.GetValues<Status>())
-                    {
-                        <option value="@status">@status</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => Books.Status)" />
-            </div>
+                <div class="mb-3">
+                    <label for="bookimgcover" class="form-label">Book Cover Image:</label>
+                    <InputFile id="bookimgcover" OnChange="@OnInputFileChange" class="form-control" />
+                    <ValidationMessage For="@(() => Books.BookImgCover)" />
+                </div>
 
-            <button type="submit" class="btn btn-primary mt-3">Create</button>
-            <a href="/books" class="btn btn-secondary mt-3 ms-2">Back to List</a>
-        </EditForm>
-    </div>
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <InputText id="title" @bind-Value="@Books.Title" class="form-control" />
+                    <ValidationMessage For="@(() => Books.Title)" />
+                </div>
+                <div class="mb-3">
+                    <label for="author" class="form-label">Author:</label>
+                    <InputText id="author" @bind-Value="@Books.Author" class="form-control" />
+                    <ValidationMessage For="@(() => Books.Author)" />
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <InputText id="description" @bind-Value="@Books.Description" class="form-control" />
+                    <ValidationMessage For="@(() => Books.Description)" />
+                </div>
+                <div class="mb-3">
+                    <label for="pages" class="form-label">Pages:</label>
+                    <InputNumber id="pages" @bind-Value="@Books.Pages" class="form-control" />
+                    <ValidationMessage For="@(() => Books.Pages)" />
+                </div>
+                <div class="mb-3">
+                    <label for="releasedate" class="form-label">Release Date:</label>
+                    <InputDate id="releasedate" @bind-Value="@Books.ReleaseDate" class="form-control" />
+                    <ValidationMessage For="@(() => Books.ReleaseDate)" />
+                </div>
+                <div class="form-group">
+                    <label for="status" class="form-label">Status:</label>
+                    <InputSelect id="status" @bind-Value="@Books.Status" class="form-control">
+                        <option value="">Select Status</option>
+                        @foreach (var status in Enum.GetValues<Status>())
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Books.Status)" />
+                </div>
 
-    <div class="col-md-4">
-        <div class="mt-2" style="max-width: 100%; max-height: 100%; overflow: hidden;">
-            <img src="@ImagePreviewUrl" alt="Book Cover Image" style="width: 70%; height: auto; border: none; box-shadow: none;" />
+                <button type="submit" class="btn btn-primary mt-3">Create</button>
+                <a href="/books" class="btn btn-secondary mt-3 ms-2">Back to List</a>
+            </EditForm>
+        </div>
+
+        <div class="col-md-4">
+            <div class="mt-2" style="max-width: 100%; max-height: 100%; overflow: hidden;">
+                <img src="@ImagePreviewUrl" alt="Book Cover Image" style="width: 70%; height: auto; border: none; box-shadow: none;" />
+            </div>
         </div>
     </div>
-</div>
+
+}
+else
+{
+    <h3>You do not have permission to add books.</h3>
+}
+
 
 @code {
     private Books Books { get; set; } = new();

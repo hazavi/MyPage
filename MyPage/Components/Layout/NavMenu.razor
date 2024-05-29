@@ -1,4 +1,6 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject MyPage.Service.LoginService loginService
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">
             <Icon Name="IconName.BalloonHeartFill" Size="IconSize.x3" /> 
@@ -45,6 +47,15 @@
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Letter
             </NavLink>
         </div>
+
+        @if (loginService.IsLoggedIn && loginService.IsAdmin)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="users">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Users
+                </NavLink>
+            </div>
+        }
 
     </nav>
 </div>

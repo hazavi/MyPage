@@ -1,16 +1,20 @@
 ﻿@page "/books"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject MyPage.Data.PageDbContext DB
+@inject MyPage.Service.LoginService loginService
 @using BookLibrary.Model
 @using BookLibrary.Model.Enum
 @rendermode InteractiveServer
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Books</PageTitle>
 
-<div class="d-flex justify-content-end mb-3">
-    <a href="books/create" class="btn btn-primary">Create New</a>
-    <a href="books/favorites" class="btn btn-secondary ms-2">View Favorites</a>
-</div>
+@if (loginService.IsLoggedIn && loginService.IsAdmin)
+{
+    <div class="d-flex justify-content-end mb-3">
+        <a href="books/create" class="btn btn-primary">Create New</a>
+        <a href="books/favorites" class="btn btn-secondary ms-2">View Favorites</a>
+    </div>
+}
 
 <div class="form-group mb-3">
     <label for="statusFilter" class="form-label">Filter by Status:</label>
@@ -36,21 +40,27 @@
                     <h6 class="card-subtitle mb-2 text-muted">by @book.Author</h6>
                     <p class="card-text"><strong>Status:</strong> @book.Status</p>
                 </div>
-                <div class="card-footer">
-                    <a href="@($"books/edit?bookid={book.BookID}")" class="btn btn-outline-primary btn-sm">Edit</a>
-                    <a href="@($"books/details?bookid={book.BookID}")" class="btn btn-outline-warning btn-sm">View</a>
-                    <a href="@($"books/delete?bookid={book.BookID}")" class="btn btn-danger btn-sm">Delete</a>
-                    <button class="btn btn-outline-success btn-sm" @onclick="() => ToggleFavorite(book.BookID)">
-                        @if (book.IsFavorite == 1)
+                @if (loginService.IsLoggedIn)
+                {
+                    <div class="card-footer">
+                        @if (loginService.IsAdmin)
                         {
-                            <Icon Name="IconName.StarFill" Size="IconSize.x6" />
+                            <a href="@($"books/edit?bookid={book.BookID}")" class="btn btn-outline-primary btn-sm">Edit</a>
+                            <a href="@($"books/details?bookid={book.BookID}")" class="btn btn-outline-warning btn-sm">View</a>
+                            <a href="@($"books/delete?bookid={book.BookID}")" class="btn btn-danger btn-sm">Delete</a>
                         }
-                        else
-                        {
-                            <Icon Name="IconName.Star" Size="IconSize.x6" />
-                        }
-                    </button>
-                </div>
+                        <button class="btn btn-outline-success btn-sm" @onclick="() => ToggleFavorite(book.BookID)">
+                            @if (book.IsFavorite == 1)
+                            {
+                                <Icon Name="IconName.StarFill" Size="IconSize.x6" />
+                            }
+                            else
+                            {
+                                <Icon Name="IconName.Star" Size="IconSize.x6" />
+                            }
+                        </button>
+                    </div>
+                }
             </div>
         </div>
     }

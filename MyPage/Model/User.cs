@@ -15,5 +15,6 @@ namespace MyPage.Model
         [StringLength(100)]
         public string Password2 { get; set; }
         public DateTime CreateDate { get; set; }
+
     }
 }

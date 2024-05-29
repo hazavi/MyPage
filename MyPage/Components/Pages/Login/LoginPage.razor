@@ -22,7 +22,7 @@
 }
 else
 {
-    <h1 class="text-center">Login</h1>
+    <h1 class="text-center">Admin Login</h1>
 
     <div class="container w-50">
         <EditForm Model="user" OnSubmit="Login" FormName="login">
@@ -97,10 +97,11 @@ else
             loginService.Id = authenticatedUser.Id;
             loginService.UserName = authenticatedUser.UserName;
             loginService.IsLoggedIn = true;
+            loginService.IsAdmin = authenticatedUser.UserName == "ky";
 
             ToastService.Notify(new(ToastType.Success, $"loggin in successfully."));
 
-            await Task.Delay(5000);
+            await Task.Delay(1000);
             Nav.NavigateTo($"/");
 
         }
