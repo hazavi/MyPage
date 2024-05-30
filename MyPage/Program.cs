@@ -5,12 +5,18 @@ using Microsoft.AspNetCore.Identity;
 using MyPage.Service;
 using BookLibrary.Service;
 using BlazorBootstrap;
+using MudBlazor.Services;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+//mudblazor
+builder.Services.AddMudServices();
 
 builder.Services.AddDbContext<PageDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.")));

@@ -7,21 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazor.Bootstrap" Version="2.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.3" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
+    <PackageReference Include="Blazor.Bootstrap" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
-    <PackageReference Include="NetcodeHub.Packages.Components.Toast" Version="1.0.1" />
+    <PackageReference Include="MudBlazor" Version="6.19.1" />
+    <PackageReference Include="MudBlazor.Extensions" Version="1.7.87" />
+    <PackageReference Include="MudBlazor.Markdown" Version="1.0.0" />
+    <PackageReference Include="MudBlazor.ThemeManager" Version="1.0.9" />
+    <PackageReference Include="NetcodeHub.Packages.Components.Toast" Version="1.0.4" />
     <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
     <PackageReference Include="System.Reflection.Metadata" Version="8.0.0" />
   </ItemGroup>

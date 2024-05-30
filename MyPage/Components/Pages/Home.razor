@@ -1,85 +1,31 @@
 ﻿@page "/"
 @using MyPage.Components.Pages.BooksPages
 @rendermode InteractiveServer
-@inject ToastService toastService
 
-<Toasts class="p-3" AutoHide="true" Delay="3000" Messages="messages" Placement="ToastsPlacement.TopRight" />
+@using MudBlazor
 
-<Tabs EnableFadeEffect="true">
-    <Tab IsActive="true">
-        <TitleTemplate>
-            <Icon Name="IconName.HouseFill" /> Home
-        </TitleTemplate>
+<MudTabs Elevation="2" Rounded="true" Centered="true" Class="my-6" Color="Color.Primary">
+    <MudTabPanel Icon="@Icons.Material.Filled.Api" Text="Notes" />
+    <MudTabPanel Icon="@Icons.Material.Filled.Build" Text="Journal" BadgeData="1" BadgeColor="Color.Success" />
+    <MudTabPanel Icon="@Icons.Material.Filled.BugReport" Text="Letter" />
+    <MudTabPanel Icon="@Icons.Material.Filled.AccessTime" Text="Postcard"/>
+</MudTabs>
+
+
+<Tabs EnableFadeEffect="true" NavStyle="NavStyle.Pills">
+    <Tab Title="Home" IsActive="true">
         <Content>
             <p class="mt-3">This is the placeholder content for the <b>Home</b> tab.</p>
-            <Spinner Color="SpinnerColor.Primary" />
-
-            <Button Color="ButtonColor.Success" @onclick="() => ShowMessage(ToastType.Success)">Success Toast</Button>
-            <Button Color="ButtonColor.Danger" @onclick="() => ShowMessage(ToastType.Danger)">Danger Toast</Button>
-
-            <Tooltip Title="Click here" role="button">
-                <i class="bi bi-arrow-repeat text-danger"></i>
-            </Tooltip>
-            <div>
-                <Progress Class="mb-3">
-                    <ProgressBar Type="ProgressType.StripedAndAnimated" Color="ProgressColor.Danger" Width="70" />
-                </Progress>
-                <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Position="Position.Relative">
-                    Inbox
-                    <Badge Color="BadgeColor.Danger"
-                           Position="Position.Absolute"
-                           Placement="BadgePlacement.TopRight"
-                           IndicatorType="BadgeIndicatorType.RoundedPill"
-                           VisuallyHiddenText="unread messages"></Badge>
-                </Button>
-                <Button Type="ButtonType.Button" Color="ButtonColor.Primary" Position="Position.Relative">
-                    Inbox
-                    <Badge Color="BadgeColor.Danger"
-                           Position="Position.Absolute"
-                           Placement="BadgePlacement.TopRight"
-                           IndicatorType="BadgeIndicatorType.RoundedPill"
-                           VisuallyHiddenText="unread messages">1</Badge>
-                </Button>
-                <Alert Color="AlertColor.Warning"> <Icon Name="IconName.ExclamationTriangleFill" class="me-2"></Icon>A simple warning alert with an icon </Alert>
-
-            </div>
         </Content>
     </Tab>
-    <Tab>
-        <TitleTemplate>
-            <Icon Name="IconName.PersonFill" /> Profile
-        </TitleTemplate>
+    <Tab Title="Profile">
         <Content>
             <p class="mt-3">This is the placeholder content for the <b>Profile</b> tab.</p>
         </Content>
     </Tab>
-    <Tab>
-        <TitleTemplate>
-            <Icon Name="IconName.PhoneFill" /> Contact
-        </TitleTemplate>
+    <Tab Title="Contact">
         <Content>
             <p class="mt-3">This is the placeholder content for the <b>Contact</b> tab.</p>
         </Content>
     </Tab>
 </Tabs>
-
-
-@code {
-    List<ToastMessage> messages = new List<ToastMessage>();
-
-    private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));
-
-    private ToastMessage CreateToastMessage(ToastType toastType)
-    {
-        string message = toastType == ToastType.Success
-            ? $"Success!"
-            : $"Danger!";
-
-        return new ToastMessage
-            {
-                Type = toastType,
-                Message = message,
-            };
-    }
-
-}

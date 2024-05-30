@@ -1,6 +1,11 @@
-﻿@inherits LayoutComponentBase
+﻿@using MudBlazor
+@inherits LayoutComponentBase
 @inject MyPage.Service.LoginService loginService
 @inject ToastService toastservice
+
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
 <div class="page">
     <div class="sidebar">
@@ -9,6 +14,7 @@
 
     <main>
         <div class="top-row px-4">
+
             @if (!loginService.IsLoggedIn)
             {
                 <a href="login">Login</a>
@@ -23,7 +29,7 @@
         </div>
 
         <article class="content px-4">
-            @Body
+            @Body 
         </article>
 
         <Toasts class="p-3" AutoHide="true" Delay="3000" Placement="ToastsPlacement.TopRight" />

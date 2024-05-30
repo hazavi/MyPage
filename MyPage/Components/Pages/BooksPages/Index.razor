@@ -40,27 +40,26 @@
                     <h6 class="card-subtitle mb-2 text-muted">by @book.Author</h6>
                     <p class="card-text"><strong>Status:</strong> @book.Status</p>
                 </div>
-                @if (loginService.IsLoggedIn)
+                @if (loginService.IsLoggedIn && loginService.IsAdmin)
                 {
                     <div class="card-footer">
-                        @if (loginService.IsAdmin)
-                        {
                             <a href="@($"books/edit?bookid={book.BookID}")" class="btn btn-outline-primary btn-sm">Edit</a>
                             <a href="@($"books/details?bookid={book.BookID}")" class="btn btn-outline-warning btn-sm">View</a>
                             <a href="@($"books/delete?bookid={book.BookID}")" class="btn btn-danger btn-sm">Delete</a>
-                        }
-                        <button class="btn btn-outline-success btn-sm" @onclick="() => ToggleFavorite(book.BookID)">
-                            @if (book.IsFavorite == 1)
-                            {
-                                <Icon Name="IconName.StarFill" Size="IconSize.x6" />
-                            }
-                            else
-                            {
-                                <Icon Name="IconName.Star" Size="IconSize.x6" />
-                            }
-                        </button>
+                            <button class="btn btn-outline-success btn-sm" @onclick="() => ToggleFavorite(book.BookID)">
+                                @if (book.IsFavorite == 1)
+                                {
+                                <Icon Name="IconName.BookmarkFill" Size="IconSize.x6" />
+                                }
+                                else
+                                {
+                                <Icon Name="IconName.Bookmark" Size="IconSize.x6" />
+                                }
+                            </button>
+                        
                     </div>
                 }
+
             </div>
         </div>
     }

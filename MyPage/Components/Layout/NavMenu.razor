@@ -1,4 +1,7 @@
 ﻿@inject MyPage.Service.LoginService loginService
+@using MudBlazor
+@rendermode InteractiveServer
+
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -11,7 +14,7 @@
 
 <input type="checkbox" title="Navigation menu" class="navbar-toggler" />
 
-<div class="nav-scrollable" @* onclick="document.querySelector('.navbar-toggler').click()" *@>
+<div class="nav-scrollable">
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -21,30 +24,35 @@
 
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="books">
-                <Icon Name="IconName.BookFill" Size="IconSize.x3" Style="margin-right: 10px;" /> Books
+                <Icon Name="IconName.BookHalf" Size="IconSize.x3" Style="margin-right: 10px;" /> Books
             </NavLink>
             <div class="nav-sub-item ps-4">
                 <NavLink class="nav-link" href="books/favorites">
-                    <Icon Name="IconName.HeartFill" Size="IconSize.x4" Style="margin-right: 10px;" /> Favorite
+                    <Icon Name="IconName.BookmarkFill" Size="IconSize.x4" Style="margin-right: 10px;" /> Favorite
                 </NavLink>
             </div>
         </div>
 
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="students">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Student
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="translate">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Translate
+                <Icon Name="IconName.PersonVCardFill" Size="IconSize.x3" Style="margin-right: 10px;" /> Student
             </NavLink>
         </div>
 
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="letter">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Letter
+                <Icon Name="IconName.JournalBookmarkFill" Size="IconSize.x3" Style="margin-right: 10px;" /> Journal
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="letter">
+                <Icon Name="IconName.PostcardHeartFill" Size="IconSize.x3" Style="margin-right: 10px;" /> PostCard
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="letter">
+                <Icon Name="IconName.EnvelopeOpenHeart" Size="IconSize.x3" Style="margin-right: 10px;" /> Letter
             </NavLink>
         </div>
 
@@ -52,10 +60,11 @@
         {
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="users">
-                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Users
+                    <Icon Name="IconName.PersonLinesFill" Size="IconSize.x3" Style="margin-right: 10px;" /> Users
                 </NavLink>
             </div>
         }
 
     </nav>
 </div>
+
