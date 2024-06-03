@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookLibrary", "BookLibrary\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentCard", "StudentCard\StudentCard.csproj", "{88DF646C-A1BB-4D4C-9B99-C8CE4987860E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDo", "ToDo\ToDo.csproj", "{D434A1E1-9CFC-466E-B6BE-D2E4496DC5DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{88DF646C-A1BB-4D4C-9B99-C8CE4987860E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88DF646C-A1BB-4D4C-9B99-C8CE4987860E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88DF646C-A1BB-4D4C-9B99-C8CE4987860E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D434A1E1-9CFC-466E-B6BE-D2E4496DC5DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D434A1E1-9CFC-466E-B6BE-D2E4496DC5DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D434A1E1-9CFC-466E-B6BE-D2E4496DC5DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D434A1E1-9CFC-466E-B6BE-D2E4496DC5DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

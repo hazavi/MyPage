@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BookLibrary\BookLibrary.csproj" />
     <ProjectReference Include="..\StudentCard\StudentCard.csproj" />
+    <ProjectReference Include="..\ToDo\ToDo.csproj" />
   </ItemGroup>
 
 </Project>
