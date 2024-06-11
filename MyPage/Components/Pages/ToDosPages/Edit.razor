@@ -1,0 +1,101 @@
+﻿@page "/ToDos/edit"
+@inject MyPage.Data.PageDbContext DB
+@using ToDo.Model
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h4>ToDos</h4>
+<hr />
+@if (ToDos is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="ToDos" OnValidSubmit="UpdateToDos" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="ToDos.Id" value="@ToDos.Id" />
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <InputText id="title" @bind-Value="ToDos.Title" class="form-control" />
+                    <ValidationMessage For="() => ToDos.Title" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="text" class="form-label">Text:</label>
+                    <InputText id="text" @bind-Value="ToDos.Text" class="form-control" />
+                    <ValidationMessage For="() => ToDos.Text" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="duedate" class="form-label">DueDate:</label>
+                    <InputDate id="duedate" @bind-Value="ToDos.DueDate" class="form-control" />
+                    <ValidationMessage For="() => ToDos.DueDate" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="datecreated" class="form-label">DateCreated:</label>
+                    <InputDate id="datecreated" @bind-Value="ToDos.DateCreated" class="form-control" />
+                    <ValidationMessage For="() => ToDos.DateCreated" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/todos">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public ToDos? ToDos { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ToDos ??= await DB.ToDos.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (ToDos is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more details, see https://aka.ms/RazorPagesCRUD.
+    public async Task UpdateToDos()
+    {
+        DB.Attach(ToDos!).State = EntityState.Modified;
+
+        try
+        {
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ToDosExists(ToDos!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/todos");
+    }
+
+    bool ToDosExists(int id)
+    {
+        return DB.ToDos.Any(e => e.Id == id);
+    }
+}

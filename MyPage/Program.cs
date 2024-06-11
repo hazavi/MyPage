@@ -1,4 +1,4 @@
-using MyPage.Components;
+﻿using MyPage.Components;
 using MyPage.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;

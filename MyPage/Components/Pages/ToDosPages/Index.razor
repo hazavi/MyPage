@@ -1,0 +1,24 @@
+﻿@page "/todos"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@inject MyPage.Data.PageDbContext DB
+@using ToDo.Model
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="todos/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="DB.ToDos">
+    <PropertyColumn Property="todos => todos.Title" />
+    <PropertyColumn Property="todos => todos.Text" />
+    <PropertyColumn Property="todos => todos.DueDate" />
+
+    <TemplateColumn Context="todos">
+        <a href="@($"todos/edit?id={todos.Id}")">Edit</a> |
+        <a href="@($"todos/details?id={todos.Id}")">Details</a> |
+        <a href="@($"todos/delete?id={todos.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>

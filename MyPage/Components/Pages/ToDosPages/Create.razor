@@ -1,0 +1,53 @@
+﻿@page "/todos/create"
+@inject MyPage.Data.PageDbContext DB
+@using ToDo.Model
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>ToDos</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="ToDos" OnValidSubmit="AddToDos" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label> 
+                <InputText id="title" @bind-Value="ToDos.Title" class="form-control" /> 
+                <ValidationMessage For="() => ToDos.Title" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="text" class="form-label">Text:</label> 
+                <InputText id="text" @bind-Value="ToDos.Text" class="form-control" /> 
+                <ValidationMessage For="() => ToDos.Text" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="duedate" class="form-label">DueDate:</label> 
+                <InputDate id="duedate" @bind-Value="ToDos.DueDate" class="form-control" /> 
+                <ValidationMessage For="() => ToDos.DueDate" class="text-danger" /> 
+            </div>          
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/todos">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public ToDos ToDos { get; set; } = new();
+
+    // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+    public async Task AddToDos()
+    {
+        DB.ToDos.Add(ToDos);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/todos");
+    }
+}

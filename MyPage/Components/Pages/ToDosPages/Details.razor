@@ -1,0 +1,51 @@
+﻿@page "/todos/details"
+@inject MyPage.Data.PageDbContext DB
+@using ToDo.Model
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h4>ToDos</h4>
+    <hr />
+    @if (todos is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Title</dt>
+            <dd class="col-sm-10">@todos.Title</dd>
+            <dt class="col-sm-2">Text</dt>
+            <dd class="col-sm-10">@todos.Text</dd>
+            <dt class="col-sm-2">DueDate</dt>
+            <dd class="col-sm-10">@todos.DueDate</dd>
+            <dt class="col-sm-2">DateCreated</dt>
+            <dd class="col-sm-10">@todos.DateCreated</dd>
+        </dl>
+        <div>
+            <a href="@($"/todos/edit?id={todos.Id}")">Edit</a> |
+            <a href="@($"/todos")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    ToDos? todos;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        todos = await DB.ToDos.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (todos is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}
