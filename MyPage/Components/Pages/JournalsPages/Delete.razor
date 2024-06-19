@@ -1,0 +1,61 @@
+﻿@page "/journals/delete"
+@inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Journal.Model
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Journals</h4>
+    <hr />
+    @if (journals is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Date</dt>
+            <dd class="col-sm-10">@journals.Date</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Title</dt>
+            <dd class="col-sm-10">@journals.Title</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Content</dt>
+            <dd class="col-sm-10">@journals.Content</dd>
+        </dl>
+        <EditForm method="post" Model="journals" OnValidSubmit="DeleteJournals" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(journals is null)">Delete</button> |
+            <a href="/journals">Back to List</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    Journals? journals;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        journals = await DB.Journals.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (journals is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    public async Task DeleteJournals()
+    {
+        DB.Journals.Remove(journals!);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/journals");
+    }
+}

@@ -1,0 +1,90 @@
+﻿@page "/Journals/edit"
+@inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Journal.Model
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h4>Journals</h4>
+<hr />
+@if (Journals is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Journals" OnValidSubmit="UpdateJournals" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="Journals.Id" value="@Journals.Id" />
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title:</label>
+                    <InputText id="title" @bind-Value="Journals.Title" class="form-control" />
+                    <ValidationMessage For="() => Journals.Title" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content:</label>
+                    <InputText id="content" @bind-Value="Journals.Content" class="form-control" />
+                    <ValidationMessage For="() => Journals.Content" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/journals">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Journals? Journals { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Journals ??= await DB.Journals.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Journals is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    public async Task UpdateJournals()
+    {
+        DB.Attach(Journals!).State = EntityState.Modified;
+
+        try
+        {
+            await DB.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!JournalsExists(Journals!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/journals");
+    }
+
+    bool JournalsExists(int id)
+    {
+        return DB.Journals.Any(e => e.Id == id);
+    }
+}

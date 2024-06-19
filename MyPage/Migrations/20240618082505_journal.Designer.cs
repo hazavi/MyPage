@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyPage.Data;
 
@@ -11,9 +12,11 @@ using MyPage.Data;
 namespace MyPage.Migrations
 {
     [DbContext(typeof(PageDbContext))]
-    partial class PageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240618082505_journal")]
+    partial class journal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,9 +38,7 @@ namespace MyPage.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly>("Date")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("date")
-                        .HasDefaultValueSql("CAST(GETDATE() AS DATE)");
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()

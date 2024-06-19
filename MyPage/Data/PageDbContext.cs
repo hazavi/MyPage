@@ -1,4 +1,5 @@
 ﻿using BookLibrary.Model;
+using BookLibrary.Journal.Model;
 using Microsoft.EntityFrameworkCore;
 using MyPage.Model;
 using StudentCard.Model;
@@ -19,6 +20,7 @@ namespace MyPage.Data
         public DbSet<Books> Books { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<ToDos> ToDos { get; set; }
+        public DbSet<Journals> Journals { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -30,6 +32,11 @@ namespace MyPage.Data
             modelBuilder.Entity<ToDos>()
                 .Property(e => e.DateCreated)
                 .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<Journals>()
+                .Property(e => e.Date)
+                .HasDefaultValueSql("CAST(GETDATE() AS DATE)");
+
         }
     }
 }

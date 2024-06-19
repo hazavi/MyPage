@@ -1,0 +1,48 @@
+﻿@page "/journals/create"
+@inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Journal.Model
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h4>Journals</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Journals" OnValidSubmit="AddJournals" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+  
+            <div class="mb-3">
+                <label for="title" class="form-label">Title:</label> 
+                <InputText id="title" @bind-Value="Journals.Title" class="form-control" /> 
+                <ValidationMessage For="() => Journals.Title" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="content" class="form-label">Content:</label> 
+                <InputText id="content" @bind-Value="Journals.Content" class="form-control" /> 
+                <ValidationMessage For="() => Journals.Content" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/journals">Back to List</a>
+</div>
+
+@code {
+
+    [SupplyParameterFromForm]
+    public Journals Journals { get; set; } = new();
+
+    public async Task AddJournals()
+    {
+        DB.Journals.Add(Journals);
+        await DB.SaveChangesAsync();
+        NavigationManager.NavigateTo("/journals");
+    }
+}

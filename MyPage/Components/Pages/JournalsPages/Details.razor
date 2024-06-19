@@ -1,0 +1,49 @@
+﻿@page "/journals/details"
+@inject MyPage.Data.PageDbContext DB
+@using BookLibrary.Journal.Model
+@inject NavigationManager NavigationManager
+@using Microsoft.EntityFrameworkCore
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h4>Journals</h4>
+    <hr />
+    @if (journals is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Date</dt>
+            <dd class="col-sm-10">@journals.Date</dd>
+            <dt class="col-sm-2">Title</dt>
+            <dd class="col-sm-10">@journals.Title</dd>
+            <dt class="col-sm-2">Content</dt>
+            <dd class="col-sm-10">@journals.Content</dd>
+        </dl>
+        <div>
+            <a href="@($"/journals/edit?id={journals.Id}")">Edit</a> |
+            <a href="@($"/journals")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    Journals? journals;
+
+    [SupplyParameterFromQuery]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        journals = await DB.Journals.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (journals is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

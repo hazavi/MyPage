@@ -1,0 +1,67 @@
+﻿.journal-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.journal-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.journal-card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+    .journal-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+
+.journal-header {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+    .journal-header h2 {
+        margin: 0;
+        font-size: 1.5em;
+        color: #333;
+        font-weight:bold;
+    }
+
+    .journal-header p {
+        margin: 0;
+        font-size: 0.9em;
+        color: #888;
+    }
+
+.journal-content p {
+    margin: 0;
+    font-size: 1em;
+    color: #333;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.journal-actions {
+    text-align: right;
+}
+
+.btn {
+    margin: 5px 0;
+}
+
+.btn-outline-secondary, .btn-outline-info, .btn-outline-danger {
+    margin-left: 5px;
+}
