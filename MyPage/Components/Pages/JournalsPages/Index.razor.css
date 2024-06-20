@@ -1,7 +1,16 @@
-﻿.journal-container {
+﻿.h1 {
+    font-family: 'Georgia', serif;
+}
+.create-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+.journal-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    font-family: 'Georgia', serif;
 }
 
 .journal-card-link {

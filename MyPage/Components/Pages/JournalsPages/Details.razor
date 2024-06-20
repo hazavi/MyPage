@@ -6,27 +6,25 @@
 
 <PageTitle>Details</PageTitle>
 
-<h1>Details</h1>
-
-<div>
-    <h4>Journals</h4>
-    <hr />
+<div class="journal-note-container">
     @if (journals is null)
     {
         <p><em>Loading...</em></p>
     }
-    else {
-        <dl class="row">
-            <dt class="col-sm-2">Date</dt>
-            <dd class="col-sm-10">@journals.Date</dd>
-            <dt class="col-sm-2">Title</dt>
-            <dd class="col-sm-10">@journals.Title</dd>
-            <dt class="col-sm-2">Content</dt>
-            <dd class="col-sm-10">@journals.Content</dd>
-        </dl>
-        <div>
-            <a href="@($"/journals/edit?id={journals.Id}")">Edit</a> |
-            <a href="@($"/journals")">Back to List</a>
+    else
+    {
+        <div class="journal-note-card">
+            <div class="journal-note-header">
+                <h2><strong>@journals.Title</strong></h2>
+                <p class="journal-date">@journals.Date.ToString("dddd, MMMM d, yyyy")</p>
+            </div>
+            <div class="journal-note-content">
+                @journals.Content
+            </div>
+            <div class="journal-note-actions">
+                <a href="@($"/journals/edit?id={journals.Id}")" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <a href="@($"/journals")" class="btn btn-sm btn-outline-primary">Back to List</a>
+            </div>
         </div>
     }
 </div>

@@ -3,13 +3,12 @@
 @inject MyPage.Data.PageDbContext DB
 @using BookLibrary.Journal.Model
 
-<PageTitle>Journal</PageTitle>
-
-<h1>Journal Entries</h1>
-
-<p>
-    <a href="journals/create" class="btn btn-primary">Create New</a>
-</p>
+<div class="create-button-container">
+    <a href="journals/create" class="btn btn-primary">
+        <Icon Name="IconName.PlusLg" />
+        Create
+    </a>
+</div>
 
 <div class="journal-container">
     @foreach (var journal in DB.Journals)
@@ -19,14 +18,17 @@
                 <div class="journal-header">
                     <h2>@journal.Title</h2>
                     <p> @journal.Date.ToString("dddd") - @journal.Date</p>
-
                 </div>
                 <div class="journal-content">
                     <p>@journal.Content</p>
                 </div>
                 <div class="journal-actions">
-                    <a href="@($"journals/edit?id={journal.Id}")" class="btn btn-sm btn-outline-secondary">Edit</a>
-                    <a href="@($"journals/delete?id={journal.Id}")" class="btn btn-sm btn-outline-danger">Delete</a>
+                    <a href="@($"journals/edit?id={journal.Id}")" class="btn btn-sm btn-outline-primary">
+                        <Icon Name="IconName.PencilFill" Size="IconSize.x6" />
+                    </a>
+                    <a href="@($"journals/delete?id={journal.Id}")" class="btn btn-sm btn-outline-danger">
+                        <Icon Name="IconName.TrashFill" Size="IconSize.x6" />
+                    </a>
                 </div>
             </div>
         </a>

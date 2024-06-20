@@ -14,5 +14,6 @@ namespace BookLibrary.Journal.Model
         public string Content { get; set; }
 
 
+
     }
 }
