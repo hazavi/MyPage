@@ -23,10 +23,11 @@
                     <p>@journal.Content</p>
                 </div>
                 <div class="journal-actions">
-                    <a href="@($"journals/edit?id={journal.Id}")" class="btn btn-sm btn-outline-primary">
+                    <a href="@($"journals/edit?id={journal.Id}")" class="edit-btn">
                         <Icon Name="IconName.PencilFill" Size="IconSize.x6" />
                     </a>
-                    <a href="@($"journals/delete?id={journal.Id}")" class="btn btn-sm btn-outline-danger">
+                    <a>|</a>
+                    <a href="@($"journals/delete?id={journal.Id}")" class="delete-btn">
                         <Icon Name="IconName.TrashFill" Size="IconSize.x6" />
                     </a>
                 </div>

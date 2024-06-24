@@ -74,3 +74,12 @@
 .btn-outline-secondary, .btn-outline-info, .btn-outline-danger {
     margin-left: 5px;
 }
+
+.delete-btn {
+    color: #DC3545;
+
+    
+}
+    .delete-btn:hover {
+        transform: scale(1.02);
+    }
